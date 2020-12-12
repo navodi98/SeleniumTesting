@@ -1,5 +1,6 @@
 package com.pragmatic.selenium.hrm;
 
+import com.github.javafaker.Faker;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -32,6 +33,7 @@ public class TestAddNewEmployee {
     public static final By TXT_LOGIN_PASSWORD = By.id("user_password");
     public static final By TXT_LOGIN_PASSWORD_CONFIRM = By.id("re_password");
     private WebDriver driver;
+    private Faker faker;
 
     @BeforeClass
     public void beforeClass(){
@@ -40,6 +42,7 @@ public class TestAddNewEmployee {
 
     @BeforeMethod
     private WebDriver beforeMethod() {
+        faker = new Faker();
         driver = new ChromeDriver();
 
         driver.get("https://hrm.pragmatictestlabs.com");
@@ -55,8 +58,24 @@ public class TestAddNewEmployee {
 
     @Test
     public void testAddNewEmployeeWithMandatoryInfo(){
-        driver.findElement(TXT_FIRSTNAME).sendKeys("Sanduni");
-        driver.findElement(TXT_LASTNAME).sendKeys("Navodi");
+        driver.findElement(TXT_FIRSTNAME).sendKeys(faker.name().firstName());
+        driver.findElement(TXT_LASTNAME).sendKeys(faker.name().lastName());
+        driver.findElement(BTN_SAVE).click();
+    }
+
+    @Test
+    public void testAddNewEmployeeWithLoginDetails(){
+        String firstname = faker.name().firstName();
+        String lastname = faker.name().lastName();
+        String username = String.format("%s.%s", firstname, lastname);
+
+        driver.findElement(TXT_FIRSTNAME).sendKeys(firstname);
+        driver.findElement(TXT_LASTNAME).sendKeys(lastname);
+        driver.findElement(BTN_LOGIN).click();
+        driver.findElement(TXT_LOGIN_USERNAME).sendKeys(username);
+        driver.findElement(TXT_LOGIN_PASSWORD).sendKeys("Ptl@#321A");
+        driver.findElement(TXT_LOGIN_PASSWORD_CONFIRM).sendKeys("Ptl@#321A");
+
         driver.findElement(BTN_SAVE).click();
     }
 
