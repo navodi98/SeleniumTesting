@@ -98,4 +98,18 @@ public class TestUserLogin {
         Assert.assertEquals(driver.findElement(By.id("spanMessage")).getText(),"Username cannot be empty");
     }
 
+    @Test
+    public void testUserLoginWithBlankPassword(){
+
+        //type the username
+        driver.findElement(By.id("txtUsername")).sendKeys("Admin");
+        driver.findElement(By.id("txtUsername")).submit();
+
+        //type the password
+        driver.findElement(By.id("txtPassword")).sendKeys("");
+
+        //verify the error message
+        Assert.assertEquals(driver.findElement(By.id("spanMessage")).getText(),"Password cannot be empty");
+    }
+
 }
