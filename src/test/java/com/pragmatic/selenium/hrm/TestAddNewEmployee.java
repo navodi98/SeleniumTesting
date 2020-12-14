@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -29,6 +30,7 @@ public class TestAddNewEmployee {
     public static final By PROFILE = By.id("photofile");
     public static final By BTN_SAVE = By.id("btnSave");
     public static final By CHK_LOGIN = By.id("chkLogin");
+    public static final By LST_STATUS = By.id("status");
     public static final By TXT_LOGIN_USERNAME = By.id("user_name");
     public static final By TXT_LOGIN_PASSWORD = By.id("user_password");
     public static final By TXT_LOGIN_PASSWORD_CONFIRM = By.id("re_password");
@@ -72,6 +74,28 @@ public class TestAddNewEmployee {
         driver.findElement(TXT_FIRSTNAME).sendKeys(firstname);
         driver.findElement(TXT_LASTNAME).sendKeys(lastname);
         driver.findElement(BTN_LOGIN).click();
+        driver.findElement(TXT_LOGIN_USERNAME).sendKeys(username);
+        driver.findElement(TXT_LOGIN_PASSWORD).sendKeys("Ptl@#321A");
+        driver.findElement(TXT_LOGIN_PASSWORD_CONFIRM).sendKeys("Ptl@#321A");
+
+        driver.findElement(BTN_SAVE).click();
+    }
+
+    @Test
+    public void testAddNewEmployeeWithLoginDetailsDisabled(){
+        String firstname = faker.name().firstName();
+        String lastname = faker.name().lastName();
+        String username = String.format("%s.%s", firstname, lastname);
+
+        driver.findElement(TXT_FIRSTNAME).sendKeys(firstname);
+        driver.findElement(TXT_LASTNAME).sendKeys(lastname);
+        driver.findElement(BTN_LOGIN).click();
+
+        Select status = new Select(driver.findElement(LST_STATUS));
+        status.selectByVisibleText("Disabled");
+        status.selectByValue("Disabled");
+        status.selectByIndex(0);
+
         driver.findElement(TXT_LOGIN_USERNAME).sendKeys(username);
         driver.findElement(TXT_LOGIN_PASSWORD).sendKeys("Ptl@#321A");
         driver.findElement(TXT_LOGIN_PASSWORD_CONFIRM).sendKeys("Ptl@#321A");
